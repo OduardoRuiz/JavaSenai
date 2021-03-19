@@ -1,0 +1,20 @@
+package objetos.gui.games;
+
+import java.awt.EventQueue;
+
+import objetos.gui.games.view.CadColega;
+
+public class Main {
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					CadColega frame = new CadColega();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+}

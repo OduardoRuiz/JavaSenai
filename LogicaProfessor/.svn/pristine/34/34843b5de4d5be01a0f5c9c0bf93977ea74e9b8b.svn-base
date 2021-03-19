@@ -1,0 +1,176 @@
+package objetos.gui.gamesExemplo1;
+
+import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.border.EmptyBorder;
+
+@SuppressWarnings("serial")
+public class CadColega extends JFrame implements ActionListener {
+	private JPanel contentPane;
+	private JLabel lblNome;
+	private JTextField tfNome;
+	private JLabel lblEmail;
+	private JTextField tfEmail;
+	private JButton btnSalvar;
+	private JButton btnSair;
+	private JButton btnListar;
+	private JButton btnMeusGames;
+
+	// Cadastro de Colegas em Memória
+	private List<Colega> cadastro = new ArrayList<>();
+
+	// Lista dos Games de UM (1) Colega
+	private List<Game> jogos = new ArrayList<>();
+
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					CadColega frame = new CadColega();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	public CadColega() {
+		setTitle("Cadastro de Colegas");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 426, 202);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+
+		lblNome = new JLabel("Nome");
+
+		tfNome = new JTextField();
+		tfNome.setColumns(10);
+
+		lblEmail = new JLabel("E-Mail");
+
+		tfEmail = new JTextField();
+		tfEmail.setColumns(10);
+
+		btnSalvar = new JButton("Salvar");
+		btnSalvar.addActionListener(this);
+
+		btnSair = new JButton("Sair");
+		btnSair.addActionListener(this);
+
+		btnListar = new JButton("Listar");
+		btnListar.addActionListener(this);
+		
+		btnMeusGames = new JButton("Incluir Jogo");
+		btnMeusGames.addActionListener(this);
+		GroupLayout gl_contentPane = new GroupLayout(contentPane);
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addContainerGap()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+									.addGroup(gl_contentPane.createSequentialGroup()
+										.addComponent(lblNome)
+										.addGap(18)
+										.addComponent(tfNome, GroupLayout.PREFERRED_SIZE, 347, GroupLayout.PREFERRED_SIZE))
+									.addGroup(gl_contentPane.createSequentialGroup()
+										.addComponent(lblEmail)
+										.addGap(18)
+										.addComponent(tfEmail)))
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(btnSalvar)
+									.addPreferredGap(ComponentPlacement.RELATED, 84, Short.MAX_VALUE)
+									.addComponent(btnListar)
+									.addGap(85)
+									.addComponent(btnSair))))
+						.addComponent(btnMeusGames))
+					.addContainerGap())
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblNome)
+						.addComponent(tfNome, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblEmail)
+						.addComponent(tfEmail, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addComponent(btnMeusGames)
+					.addPreferredGap(ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnSalvar)
+						.addComponent(btnSair)
+						.addComponent(btnListar))
+					.addContainerGap())
+		);
+		contentPane.setLayout(gl_contentPane);
+
+		// Define o botão OK como o botão padrão do formulario (Que aceita o ENTER)
+		getRootPane().setDefaultButton(btnSalvar);
+		// Centraliza a Janela no Centro da tela do computador
+		setLocationRelativeTo(null);
+	}
+
+	public void actionPerformed(ActionEvent evento) {
+		Object botao = evento.getSource();
+
+		if (botao.equals(btnSalvar)) { // Ok
+			String nome = tfNome.getText();
+			String email = tfEmail.getText();
+
+			// Criar o "registro" Objeto do Colega
+			Colega obj = new Colega();
+			obj.setNome(nome);
+			obj.setEmail(email);
+			obj.setJogos(jogos);
+
+			// Salva os dados do Colega
+			cadastro.add(obj);
+			
+			jogos = new ArrayList<>();
+			tfNome.setText("");
+			tfEmail.setText("");
+			tfNome.requestFocus();
+		} else if(botao.equals(btnListar)) {
+			String msg = "Cadastro de Colegas\n\n";
+			for (Colega colega : cadastro) {
+				msg += colega + "\n";
+			}
+			JOptionPane.showMessageDialog(this, msg);
+		} else if(botao.equals(btnMeusGames)) {
+			Game jogo = new Game();
+			
+			CadGames tela = new CadGames(jogo);
+			tela.setLocationRelativeTo(this);
+			tela.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			tela.setVisible(true);
+			
+			if(tela.getJogo() != null) {
+				jogos.add(jogo);
+			}
+		} else { // Sair
+			System.exit(0);
+		}
+	}
+}

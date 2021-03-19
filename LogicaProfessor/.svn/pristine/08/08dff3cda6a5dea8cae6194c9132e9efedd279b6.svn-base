@@ -1,0 +1,131 @@
+package objetos.gui.resposta.ex03.view;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.NumberFormat;
+import java.text.ParseException;
+
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.LayoutStyle.ComponentPlacement;
+
+import objetos.gui.resposta.ex03.model.Produto;
+
+@SuppressWarnings("serial")
+public class CadProduto extends JDialog implements ActionListener {
+	private JLabel lblNome;
+	private JTextField tfNome;
+	private JLabel lblPreco;
+	private JTextField tfPreco;
+	private JButton btnSalvar;
+	private JButton btnFechar;
+	private Produto produto = null;
+	private NumberFormat fmt = NumberFormat.getNumberInstance(); 
+	
+	public CadProduto() {
+		this(null);
+	}
+	
+	public CadProduto(Produto produto) {
+		setResizable(false);
+		setModal(true);
+		setTitle("Cadastro de Produto");
+		setBounds(100, 100, 439, 172);
+		
+		lblNome = new JLabel("Nome");
+		
+		tfNome = new JTextField();
+		tfNome.setColumns(10);
+		
+		lblPreco = new JLabel("Preço");
+		
+		tfPreco = new JTextField();
+		tfPreco.setColumns(10);
+		
+		btnSalvar = new JButton("Salvar");
+		btnSalvar.addActionListener(this);
+		
+		btnFechar = new JButton("Fechar");
+		btnFechar.addActionListener(this);
+
+		GroupLayout groupLayout = new GroupLayout(getContentPane());
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(24)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+							.addGroup(groupLayout.createSequentialGroup()
+								.addComponent(btnSalvar)
+								.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(btnFechar))
+							.addGroup(groupLayout.createSequentialGroup()
+								.addComponent(lblNome)
+								.addGap(18)
+								.addComponent(tfNome, GroupLayout.PREFERRED_SIZE, 345, GroupLayout.PREFERRED_SIZE)))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(lblPreco)
+							.addGap(18)
+							.addComponent(tfPreco, GroupLayout.PREFERRED_SIZE, 122, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap(20, Short.MAX_VALUE))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(16)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblNome)
+						.addComponent(tfNome, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblPreco)
+						.addComponent(tfPreco, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnSalvar)
+						.addComponent(btnFechar))
+					.addGap(18))
+		);
+		getContentPane().setLayout(groupLayout);
+
+		carregaTela(produto);
+		
+		getRootPane().setDefaultButton(btnSalvar);
+	}
+
+	private void carregaTela(Produto produto) {
+		if(produto != null) {
+			this.produto = produto;
+			tfNome.setText(produto.getNome());
+			tfPreco.setText(String.format("%,.2f", produto.getPreco()));
+		}
+	}
+
+	public Produto getProduto() {
+		return produto;
+	}
+	
+	public void actionPerformed(ActionEvent evento) {
+		Object botao = evento.getSource();
+		
+		if(botao.equals(btnSalvar)) {
+			try {
+				if(produto == null) 
+					produto = new Produto();
+				
+				produto.setNome(tfNome.getText());
+				produto.setPreco(fmt.parse(tfPreco.getText()).doubleValue());
+				setVisible(false);
+			} catch (ParseException ex) {
+				JOptionPane.showMessageDialog(this, "Preço inválido!");
+			}
+		} else {
+			setVisible(false);
+		}
+	}
+}

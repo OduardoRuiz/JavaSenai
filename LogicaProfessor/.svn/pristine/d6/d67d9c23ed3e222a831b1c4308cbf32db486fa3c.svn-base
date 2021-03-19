@@ -1,0 +1,45 @@
+package objetos.gui.gamesExemplo1;
+
+import java.util.List;
+
+public class Colega {
+	private String nome;
+	private String email;
+	private List<Game> jogos; 
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public List<Game> getJogos() {
+		return jogos;
+	}
+
+	public void setJogos(List<Game> jogos) {
+		this.jogos = jogos;
+	}
+
+	@Override
+	public String toString() {
+		String txt = "Nome: " + nome + " E-Mail: " + email 
+				+ "\nMeus Jogos\n";
+		for (Game jogo : jogos) {
+			txt += jogo + "\n";
+		}
+		
+		return txt;
+	}
+
+}

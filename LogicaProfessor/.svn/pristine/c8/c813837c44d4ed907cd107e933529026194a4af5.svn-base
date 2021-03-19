@@ -1,0 +1,9 @@
+package objetos.exemplos.agragacao;
+
+import java.util.List;
+
+public class Time {
+	private String nome;
+	private String tecnico;
+	private List<Atleta> atletas;
+}

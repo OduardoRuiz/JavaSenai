@@ -1,0 +1,5 @@
+package jdbc.exemplo.projeto2.dao;
+
+public class ProdutoDao {
+
+}

@@ -1,0 +1,19 @@
+package logica.ex05;
+
+import br.senai.sp.info132.console.Programa;
+
+public class Binario extends Programa {
+	@SuppressWarnings("unused")
+	@Override
+	public void inicio() {
+		//             1
+		//             2631
+		//             8426 8421 
+		int numero = 0b0001_1100;
+		//escreva("[",numero,"]");
+		long x = (long)393848484848484848.4;
+		
+		int i = Integer.parseInt("ABC");
+		escreva(Integer.toHexString(i));
+	}
+}

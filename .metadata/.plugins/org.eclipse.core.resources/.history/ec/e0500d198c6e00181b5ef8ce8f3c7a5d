@@ -1,0 +1,124 @@
+package jdbc.exercicio2.dao;
+
+import java.awt.event.ItemEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+
+import jdbc.exercicio2.model.Compra;
+import jdbc.exercicio2.model.ItemDeCompra;
+
+public class ItemDao {
+	
+	
+	private PreparedStatement incluir;
+	private PreparedStatement consultar;
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public ItemDao() throws DaoException { 
+		
+		try { 
+		Connection con = Database.getConnection();
+		
+		incluir = con.prepareStatement("insert into Itemdecompra ( iditemdecompra, nome, quantidade, valor) Values (?, ?, ?, ?)");
+		
+		consultar = con.prepareStatement("select * from compra where idcompra = ? ");
+		
+	}catch (SQLException ex) {
+		
+		ex.printStackTrace();
+		
+		throw new DaoException("houve um problemana conexão com o banco de dados");
+		
+	}
+	
+
+	} public void incluir(ItemDeCompra obj, int iditemdecompra) throws DaoException {
+		
+		
+		try { 
+			
+			incluir.setString(1, obj.getNome());
+			incluir.setDouble(2, obj.getValor());
+			incluir.setDouble(3, obj.getQuantidade());
+			incluir.setInt(4, obj.getId());
+			incluir.execute();
+			
+		}catch (SQLException ex) { 
+			
+			ex.printStackTrace();
+			throw new DaoException("falha ao incluir um produto");
+		}
+
+		
+	}
+	
+	public List<ItemDeCompra> consultar (int iditemdecompra) throws DaoException { 
+		
+		
+		try {  
+			List<ItemDeCompra> lista = new ArrayList<>();
+			
+			consultar.setInt(1, iditemdecompra);
+			
+			ResultSet resultado = consultar.executeQuery();
+			
+			
+			while (resultado.next())  { 
+				
+				 ItemDeCompra obj = new ItemDeCompra();
+				
+				obj.setId(resultado.getInt("id"));
+				obj.setNome(resultado.getString("nome"));
+				obj.setQuantidade(resultado.getInt("quantidade"));
+				obj.setValor(resultado.getDouble("Valor"));
+				
+				lista.add(obj);
+				
+				
+			}
+			
+			return lista;
+			
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			throw new DaoException("Houve falha ao listar os Itens");
+		}
+		
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
